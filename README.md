@@ -26,7 +26,7 @@ Add a `"partial-ts-check"` block to your project’s `package.json`:
 
 ```json
 {
-  ""partial-ts-check"": {
+  "partial-ts-check": {
     "whitelist": "app/scripts/ts-whitelist.js",
     "blacklist": "app/scripts/ts-blacklist.js",
     "printFilesList": true,
