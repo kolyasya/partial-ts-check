@@ -1,6 +1,6 @@
 {
   "name": "partial-ts-checker",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "CLI to run TypeScript checks and report only whitelisted files, ignoring blacklisted files.",
   "bin": {
     "partial-ts-checker": "dist/cli.js"

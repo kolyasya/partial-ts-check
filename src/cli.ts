@@ -24,7 +24,7 @@ function loadConsumerPackageJSON() {
   const pkgPath = path.join(cwd, 'package.json');
   const raw = fs.readFileSync(pkgPath, 'utf8');
   return JSON.parse(raw) as {
-    partialTsChecker?: {
+    'partial-ts-checker'?: {
       // preferred keys
       whitelist?: string;
       whiteList?: string;
@@ -63,12 +63,10 @@ function readList(listPath: string): string[] {
 
 function getConfig() {
   const pkg = loadConsumerPackageJSON();
-  const cfg = pkg.partialTsChecker || {};
+  const cfg = pkg['partial-ts-checker'] || {};
   return {
-    whiteListPath:
-      cfg.whitelist || cfg.whiteList || DEFAULT_WHITELIST_PATH,
-    blackListPath:
-      cfg.blacklist || cfg.blackList || DEFAULT_BLACKLIST_PATH,
+    whiteListPath: cfg.whitelist || cfg.whiteList || DEFAULT_WHITELIST_PATH,
+    blackListPath: cfg.blacklist || cfg.blackList || DEFAULT_BLACKLIST_PATH,
     printFilesList: cfg.printFilesList ?? true,
     tsconfig: cfg.tsconfig || DEFAULT_TSCONFIG_PATH,
   } as const;
@@ -80,10 +78,10 @@ function runTsc(tsconfig: string) {
     console.error(`❌ TypeScript config file not found: ${tsconfig}`);
     process.exit(1);
   }
-  
+
   const tscPath = resolveFromCwd('node_modules/typescript/bin/tsc');
   console.log(`ℹ️  Running TypeScript check with config: ${tsconfig}`);
-  
+
   let output = '';
   try {
     execSync(`${tscPath} --noEmit --project ${tsconfig}`, { stdio: 'pipe' });
@@ -116,16 +114,18 @@ function groupParsedByFile(
 function main() {
   const { whiteListPath, blackListPath, printFilesList, tsconfig } =
     getConfig();
-  
+
   console.log(`ℹ️  Loading configuration:`);
   console.log(`  - Whitelist: ${whiteListPath}`);
   console.log(`  - Blacklist: ${blackListPath}`);
   console.log(`  - TypeScript config: ${tsconfig}`);
-  
+
   const whiteList = readList(whiteListPath);
   const blackList = readList(blackListPath);
-  
-  console.log(`ℹ️  Loaded ${whiteList.length} whitelist pattern(s), ${blackList.length} blacklist pattern(s)`);
+
+  console.log(
+    `ℹ️  Loaded ${whiteList.length} whitelist pattern(s), ${blackList.length} blacklist pattern(s)`
+  );
 
   const { ok, output } = runTsc(tsconfig);
   if (ok) {

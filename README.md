@@ -22,11 +22,11 @@ npm i -D typescript
 
 ## Configure in your project
 
-Add a `partialTsChecker` block to your project’s `package.json`:
+Add a `"partial-ts-checker"` block to your project’s `package.json`:
 
 ```json
 {
-  "partialTsChecker": {
+  ""partial-ts-checker"": {
     "whitelist": "app/scripts/ts-whitelist.js",
     "blacklist": "app/scripts/ts-blacklist.js",
     "printFilesList": true,
