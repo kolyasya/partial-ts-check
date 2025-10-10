@@ -1,0 +1,37 @@
+{
+  "name": "partial-ts-checker",
+  "version": "0.0.1",
+  "description": "CLI to run TypeScript checks and report only whitelisted files, ignoring blacklisted files.",
+  "bin": {
+    "partial-ts-checker": "dist/cli.js"
+  },
+  "type": "module",
+  "main": "dist/cli.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/cli.ts --format esm --target node18 --sourcemap false --minify --clean --out-dir dist",
+    "dev": "tsup src/cli.ts --format esm --target node18 --watch --sourcemap --out-dir dist",
+    "prepare": "pnpm run build",
+    "prepack": "pnpm run build",
+    "prepublishOnly": "pnpm run build"
+  },
+  "keywords": [
+    "typescript",
+    "tsc",
+    "cli",
+    "checker",
+    "partial"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "tsup": "^7.2.0"
+  },
+  "peerDependencies": {}
+}
