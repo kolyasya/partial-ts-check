@@ -7,15 +7,18 @@ A tiny CLI that runs `tsc --noEmit` and reports only TypeScript errors from whit
 Use a direct Git URL (no publish required):
 
 ```sh
-pnpm add -D github:<owner>/<repo>#<path-to>/partial-ts-checker
+pnpm add -D github:kolyasya/partial-ts-checker
 # or
-npm i -D github:<owner>/<repo>#<path-to>/partial-ts-checker
+npm i -D github:kolyasya/partial-ts-checker
 ```
 
-Notes:
-- This package builds on install via the `prepare` script. Ensure your environment can run `pnpm` and has Node >= 18.
-- Replace `<owner>`, `<repo>`, and `<path-to>` with your repo details. Example:
-  `pnpm add -D github:GlyphicSoftware/GSI-Ecomm#partial-ts-checker`
+**Important:** Make sure you have `typescript` installed in your project:
+
+```sh
+pnpm add -D typescript
+# or
+npm i -D typescript
+```
 
 ## Configure in your project
 
@@ -38,6 +41,7 @@ Add a `partialTsChecker` block to your project’s `package.json`:
 - `tsconfig` (optional): path to your tsconfig (default: `app/tsconfig.json`)
 
 White/black lists can be:
+
 - `.js`/`.cjs` exporting an array
 - `.json` array file
 - Text file with newline-delimited paths/patterns
@@ -59,11 +63,14 @@ pnpm ts:partial
 ```
 
 ## How it works
+
 - Resolves and runs your local `node_modules/typescript/bin/tsc` with `--noEmit`
 - Parses output, ignores blacklisted files, includes only whitelisted files
 - Exits non-zero if there are errors in whitelisted files; otherwise prints a short summary for the rest
 
+**Note:** This tool uses the TypeScript compiler installed in your project, so make sure you have the `typescript` package installed as a dependency.
+
 ## Requirements
+
 - Node >= 18
 - `typescript` installed in the consuming project
-- `pnpm` available if installing from Git (to run `prepare`)

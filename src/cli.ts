@@ -6,6 +6,11 @@ import { createRequire } from 'module';
 
 const normalize = (f: string) => f.replace(/\\/g, '/');
 
+// Default configuration paths
+const DEFAULT_WHITELIST_PATH = 'app/scripts/ts-whitelist.js';
+const DEFAULT_BLACKLIST_PATH = 'app/scripts/ts-blacklist.js';
+const DEFAULT_TSCONFIG_PATH = 'app/tsconfig.json';
+
 // Minimal declaration to avoid requiring @types/node in this CLI
 declare const process: {
   cwd(): string;
@@ -38,7 +43,8 @@ function resolveFromCwd(...segments: string[]) {
 function readList(listPath: string): string[] {
   const abs = resolveFromCwd(listPath);
   if (!fs.existsSync(abs)) {
-    throw new Error(`List file not found: ${listPath}`);
+    console.log(`ℹ️  List file not found: ${listPath} (will be ignored)`);
+    return [];
   }
   if (abs.endsWith('.js') || abs.endsWith('.cjs')) {
     const mod = requireFromCwd(abs);
@@ -60,16 +66,24 @@ function getConfig() {
   const cfg = pkg.partialTsChecker || {};
   return {
     whiteListPath:
-      cfg.whitelist || cfg.whiteList || 'app/scripts/ts-whitelist.js',
+      cfg.whitelist || cfg.whiteList || DEFAULT_WHITELIST_PATH,
     blackListPath:
-      cfg.blacklist || cfg.blackList || 'app/scripts/ts-blacklist.js',
+      cfg.blacklist || cfg.blackList || DEFAULT_BLACKLIST_PATH,
     printFilesList: cfg.printFilesList ?? true,
-    tsconfig: cfg.tsconfig || 'app/tsconfig.json',
+    tsconfig: cfg.tsconfig || DEFAULT_TSCONFIG_PATH,
   } as const;
 }
 
 function runTsc(tsconfig: string) {
+  const tsconfigPath = resolveFromCwd(tsconfig);
+  if (!fs.existsSync(tsconfigPath)) {
+    console.error(`❌ TypeScript config file not found: ${tsconfig}`);
+    process.exit(1);
+  }
+  
   const tscPath = resolveFromCwd('node_modules/typescript/bin/tsc');
+  console.log(`ℹ️  Running TypeScript check with config: ${tsconfig}`);
+  
   let output = '';
   try {
     execSync(`${tscPath} --noEmit --project ${tsconfig}`, { stdio: 'pipe' });
@@ -102,8 +116,16 @@ function groupParsedByFile(
 function main() {
   const { whiteListPath, blackListPath, printFilesList, tsconfig } =
     getConfig();
+  
+  console.log(`ℹ️  Loading configuration:`);
+  console.log(`  - Whitelist: ${whiteListPath}`);
+  console.log(`  - Blacklist: ${blackListPath}`);
+  console.log(`  - TypeScript config: ${tsconfig}`);
+  
   const whiteList = readList(whiteListPath);
   const blackList = readList(blackListPath);
+  
+  console.log(`ℹ️  Loaded ${whiteList.length} whitelist pattern(s), ${blackList.length} blacklist pattern(s)`);
 
   const { ok, output } = runTsc(tsconfig);
   if (ok) {
