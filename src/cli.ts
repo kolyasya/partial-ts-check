@@ -24,7 +24,7 @@ function loadConsumerPackageJSON() {
   const pkgPath = path.join(cwd, 'package.json');
   const raw = fs.readFileSync(pkgPath, 'utf8');
   return JSON.parse(raw) as {
-    'partial-ts-checker'?: {
+    'partial-ts-check'?: {
       // preferred keys
       whitelist?: string;
       whiteList?: string;
@@ -63,7 +63,7 @@ function readList(listPath: string): string[] {
 
 function getConfig() {
   const pkg = loadConsumerPackageJSON();
-  const cfg = pkg['partial-ts-checker'] || {};
+  const cfg = pkg['partial-ts-check'] || {};
   return {
     whiteListPath: cfg.whitelist || cfg.whiteList || DEFAULT_WHITELIST_PATH,
     blackListPath: cfg.blacklist || cfg.blackList || DEFAULT_BLACKLIST_PATH,

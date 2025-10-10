@@ -1,4 +1,4 @@
-# partial-ts-checker
+# partial-ts-check
 
 A tiny CLI that runs `tsc --noEmit` and reports only TypeScript errors from whitelisted files while ignoring blacklisted files. Handy for gradually adopting TypeScript in large repos.
 
@@ -7,9 +7,9 @@ A tiny CLI that runs `tsc --noEmit` and reports only TypeScript errors from whit
 Use a direct Git URL (no publish required):
 
 ```sh
-pnpm add -D github:kolyasya/partial-ts-checker
+pnpm add -D github:kolyasya/partial-ts-check
 # or
-npm i -D github:kolyasya/partial-ts-checker
+npm i -D github:kolyasya/partial-ts-check
 ```
 
 **Important:** Make sure you have `typescript` installed in your project:
@@ -22,11 +22,11 @@ npm i -D typescript
 
 ## Configure in your project
 
-Add a `"partial-ts-checker"` block to your project’s `package.json`:
+Add a `"partial-ts-check"` block to your project’s `package.json`:
 
 ```json
 {
-  ""partial-ts-checker"": {
+  ""partial-ts-check"": {
     "whitelist": "app/scripts/ts-whitelist.js",
     "blacklist": "app/scripts/ts-blacklist.js",
     "printFilesList": true,
@@ -51,7 +51,7 @@ White/black lists can be:
 ```json
 {
   "scripts": {
-    "ts:partial": "partial-ts-checker"
+    "ts:partial": "partial-ts-check"
   }
 }
 ```
