@@ -7,9 +7,9 @@ import { createRequire } from 'module';
 const normalize = (f: string) => f.replace(/\\/g, '/');
 
 // Default configuration paths
-const DEFAULT_WHITELIST_PATH = 'app/scripts/ts-whitelist.js';
-const DEFAULT_BLACKLIST_PATH = 'app/scripts/ts-blacklist.js';
-const DEFAULT_TSCONFIG_PATH = 'app/tsconfig.json';
+const DEFAULT_WHITELIST_PATH = 'ts-whitelist.js';
+const DEFAULT_BLACKLIST_PATH = 'ts-blacklist.js';
+const DEFAULT_TSCONFIG_PATH = 'tsconfig.json';
 
 // Minimal declaration to avoid requiring @types/node in this CLI
 declare const process: {
