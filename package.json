@@ -14,6 +14,10 @@
     "build": "tsup src/cli.ts --format esm --target node18 --sourcemap false --minify --clean --out-dir dist",
     "dev": "tsup src/cli.ts --format esm --target node18 --watch --sourcemap --out-dir dist",
     "typecheck": "tsc --noEmit",
+    "fixtures:tsc": "tsc --noEmit -p tsconfig.fixtures.json",
+    "fixtures:partial": "pnpm -s build && node dist/cli.js",
+    "fixtures:partial:fail": "pnpm -s build && node scripts/run-with-whitelist.mjs test-lists/fail.js",
+    "fixtures:partial:ok": "pnpm -s build && node scripts/run-with-whitelist.mjs test-lists/pass.js",
     "prepare": "pnpm run build",
     "prepack": "pnpm run build",
     "prepublishOnly": "pnpm run build"
@@ -34,5 +38,11 @@
     "@types/node": "^24.7.1",
     "tsup": "^7.2.0",
     "typescript": "^5.9.3"
+  },
+  "partial-ts-check": {
+    "whitelist": "test-lists/default.js",
+    "blacklist": "test-lists/blacklist.js",
+    "printFilesList": true,
+    "tsconfig": "tsconfig.fixtures.json"
   }
 }

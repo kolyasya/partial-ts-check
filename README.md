@@ -27,8 +27,8 @@ Add a `"partial-ts-check"` block to your project’s `package.json`:
 ```json
 {
   "partial-ts-check": {
-    "whitelist": "app/scripts/ts-whitelist.js",
-    "blacklist": "app/scripts/ts-blacklist.js",
+  "whitelist": "app/scripts/test-lists/default.js",
+  "blacklist": "app/scripts/test-lists/blacklist.js",
     "printFilesList": true,
     "tsconfig": "app/tsconfig.json"
   }
@@ -74,3 +74,34 @@ pnpm ts:partial
 
 - Node >= 18
 - `typescript` installed in the consuming project
+
+## Local development with fixtures
+
+This repo includes a small fixtures setup to develop and manually test the CLI:
+
+- `fixtures/` has a few TS files, some valid and some intentionally broken
+- `tsconfig.fixtures.json` points `tsc` at the fixtures folder
+- `test-lists/default.js` and `test-lists/blacklist.js` are default lists used for local runs
+- `test-lists/pass.js` only includes files without errors
+- `test-lists/fail.js` includes files with errors
+
+Scripts:
+
+- `pnpm run fixtures:tsc` – run raw `tsc` on fixtures (should fail with 3 errors)
+- `pnpm run fixtures:partial` – run the built CLI with default `test-lists/default.js` and `test-lists/blacklist.js`
+- `pnpm run fixtures:partial:ok` – use `test-lists/pass.js` and expect a success exit code
+- `pnpm run fixtures:partial:fail` – use `test-lists/fail.js` and expect a failure exit code
+
+Notes:
+
+- The CLI reads configuration from the project's `package.json` under the `partial-ts-check` key. For the `:ok`/`:fail` scripts we temporarily override the whitelist via `scripts/run-with-whitelist.mjs`.
+- If you prefer to run the CLI without rebuilding manually, use `pnpm dev` in another terminal to watch-rebuild and then run the fixture scripts.
+
+### Possible extra dev dependencies
+
+The current setup works with the existing deps. If you want faster iterations, consider:
+
+- `tsx` – to run ESM TS directly without bundling (e.g., for ad-hoc scripts)
+- `vitest` – to add automated tests asserting exit codes and output formatting
+
+I didn't add them yet to keep the footprint minimal; happy to wire them up if you want automated tests.
