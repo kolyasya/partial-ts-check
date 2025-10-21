@@ -40,7 +40,7 @@
     "typescript": "^5.9.3"
   },
   "partial-ts-check": {
-    "whitelist": "test-lists/default.js",
+    "whitelist": "test-lists/fail.js",
     "blacklist": "test-lists/blacklist.js",
     "printFilesList": true,
     "tsconfig": "tsconfig.fixtures.json"
